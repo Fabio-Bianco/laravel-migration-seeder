@@ -1,0 +1,5 @@
+/* resources/css/app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* DaisyUI è caricato come plugin in tailwind.config.js */

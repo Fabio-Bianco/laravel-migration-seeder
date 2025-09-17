@@ -2,4 +2,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* DaisyUI è caricato come plugin in tailwind.config.js */
+
+/* DaisyUI viene importato tramite plugin in tailwind.config.js */
+
+/* Personalizzazione con DaisyUI + Tailwind */
+.trains-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+ 
+    border-top: 2px solid theme('colors.base-300');
+    border-bottom: 2px solid theme('colors.base-300');
+    background-color: theme('colors.base-100');
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px theme('colors.base-300');
+}
+
+.trains-table {
+    font-size: 1.25rem; /* testo più grande */
+    max-width: 1200px;  /* tabella più larga */
+    margin-left: auto;
+    margin-right: auto;
+}

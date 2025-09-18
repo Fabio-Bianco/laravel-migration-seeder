@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +13,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $faker = \Faker\Factory::create(config('app.faker_locale'));
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $trains = [];
+
+        for ($i = 0; $i < 50; $i++) {
+
+            // Partenza tra adesso e le prossime 2 ore
+            $partenza = $faker->dateTimeBetween('now', '+2 hours');
+
+            // Arrivo tra partenza e +6 ore dalla partenza
+            // Faker accetta oggetti DateTime come intervallo
+            $arrivoMin = clone $partenza;
+            $arrivoMax = (clone $partenza)->modify('+6 hours');
+            $arrivo = $faker->dateTimeBetween($arrivoMin, $arrivoMax);
+
+            $trains[] = [
+                'azienda'           => $faker->company,
+                'cancellato'        => $faker->boolean(10), // ~10% cancellati
+                'codice_treno'      => strtoupper($faker->unique()->bothify('??####')),
+                'in_orario'         => $faker->boolean,
+                'orario_partenza'   => $partenza, // DateTime → cast automatico da query builder
+                'orario_arrivo'     => $arrivo,
+                'stazione_partenza' => $faker->city,
+                'stazione_arrivo'   => $faker->city,
+                'totale_carrozze'   => $faker->numberBetween(4, 12),
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ];
+        }
+
+        DB::table('trains')->insert($trains);
     }
 }

@@ -4,21 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Train;
 use Carbon\Carbon;
-use illuminate\Http\Request;
-
-
+use Illuminate\Http\Request;
 
 class TrainController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        // Mostra solo i treni in partenza da "adesso" in poi
+        $now = Carbon::now();
 
-        $today = Carbon::now()->format('Y-m-d');
+        $trains = Train::where('orario_partenza', '>=', $now)
+            ->orderBy('orario_partenza') // tabellone ordinato per orario
+            ->get();
 
-        $trains = Train::where('orario_partenza', '>=', $today)->get();
-
-        
         return view('index', compact('trains'));
-
-
     }
 }
